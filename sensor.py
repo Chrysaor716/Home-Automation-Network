@@ -5,6 +5,8 @@ Pi3: Sensor
 """
 
 import time
+import pika
+import uuid
 
 while 1:
 	# Note: Enter this command to the terminal:
