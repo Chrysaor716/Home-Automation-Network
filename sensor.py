@@ -23,16 +23,17 @@ while 1:
 	fileRead = file.read()
 	file.close()
 
-	# Get second line of file, split it into space-
-	#	delimited elements, and gets the 10th
-	#	(index 9) of these elements
+	# Split text with new lines and get the second line.
+	# 	Split line into space-delimited elements
+	#	(separate line into words) and get the 10th
+	#	word (index 9) of these elements.
 	tempdata = fileRead.split("\n")[1].split(" ")[9]
 
-	# Dumps the first two characters ("t=") of 10th
-	#	element and converts the remaining from
-	#	a string to a float and divide by 1000
+	# Omit the first two characters ("t=") of 10th
+	#	element and convert from a string to a float
+	#	and divide by 1000.
 	temperature = float(tempdata[2:])
-	temperature  = temperature / 1000
+	temperature = temperature / 1000
 	print temperature
 
 	time.sleep(1)
