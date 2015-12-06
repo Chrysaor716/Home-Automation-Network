@@ -1,7 +1,7 @@
 # Home-Automation-Network
 Integration of four Raspberry Pi's to create an interactive home environment.
 
-The Pi's interact on a local network with RabbitMQ as the message broker. One Pi act as a central server, with the rest communicating via that single server.
+The Pi's interact on a local network with either RabbitMQ as the message broker or sockets. One Pi act as a central server, with the rest communicating via that single server.
 
 	Pi 1: User Interaction
 Takes in voice input as well as a web-based protocol from the user.

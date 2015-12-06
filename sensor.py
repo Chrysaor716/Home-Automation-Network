@@ -4,9 +4,26 @@
 Pi3: Sensor
 """
 
+import sys
 import time
-import pika
-import uuid
+import socket
+
+host = 'localhost'
+port = 50000
+SIZE = 1024	# Max data size client will handle at a time
+s = None	# Initialize socket variable
+try:
+	# Create a socket object stored in s that will use
+	#	IPv4 and TCP.
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.settimeout(5)
+	# Connect to the server.
+	s.connect((host, port))
+except socket.error, (value, message):
+	if s:
+		s.close()
+	print 'Could not open socket: ' + message
+	sys.exit(1)
 
 while 1:
 	# Note: Enter this command to the terminal:
@@ -36,6 +53,18 @@ while 1:
 	#	and divide by 1000.
 	temperature = float(tempdata[2:])
 	temperature = temperature / 1000
-	print temperature
+
+	# Client transmits data to server & returns how much
+	#	data was sent to it.
+	s.send(temperature)
+	print 'Sent ' + temperature ' to the server'
+
+	# Retrieve data from server with a buffer size as the
+	#	argument, indicating the maximum size it will
+	#	handle at a time.
+	data = s.recv(SIZE)
+	print 'Received: ' + data + ' from server.'
 
 	time.sleep(1)
+
+s.close() # Close the socket
