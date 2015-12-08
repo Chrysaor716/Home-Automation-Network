@@ -8,6 +8,11 @@ import sys
 import time
 import socket
 
+# Number of samples to take (& compute average for)
+numSamples = 0
+averageTemperature = 0
+
+'''	Set up socket	'''
 host = 'localhost'
 port = 50000
 SIZE = 1024	# Max data size client will handle at a time
@@ -26,6 +31,8 @@ except socket.error, (value, message):
 	sys.exit(1)
 
 while 1:
+	numSamples = numSamples + 1
+
 	# Note: Enter this command to the terminal:
 	#	ls -l /sys/bus/w1/devices
 	# The temperature sensor appears with an
@@ -54,17 +61,25 @@ while 1:
 	temperature = float(tempdata[2:])
 	temperature = temperature / 1000
 
-	# Client transmits data to server & returns how much
-	#	data was sent to it.
-	s.send(temperature)
-	print 'Sent ' + temperature ' to the server'
+	averageTemperature = averageTemperature + temperature
 
+	# Compute average temperature every 5 minutes (50 samples)
+	if numSamples == 50:
+		averageTemperature = averageTemperature / numSamples
+
+		# Client transmits data to server & returns how much
+		#	data was sent to it.
+		s.send(averageTemperature)
+		print 'Sent ' + averageTemperature ' to the server'
+
+		numSamples = 0
+		
 	# Retrieve data from server with a buffer size as the
 	#	argument, indicating the maximum size it will
 	#	handle at a time.
 	data = s.recv(SIZE)
 	print 'Received: ' + data + ' from server.'
 
-	time.sleep(1)
+	time.sleep(0.100) # Sample every millisecond
 
 s.close() # Close the socket
