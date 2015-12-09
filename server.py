@@ -54,7 +54,7 @@ class Server:
 
                 if s == self.server: 
                     # handle the server socket 
-                    c = Client(self.server.accept()) 
+                    c = Client(self.server.accept(), self.home) 
                     c.start() 
                     self.threads.append(c) 
 
@@ -70,11 +70,12 @@ class Server:
             c.join() 
 
 class Client(threading.Thread): 
-    def __init__(self,(client,address)): 
+    def __init__(self,(client,address), home): 
         threading.Thread.__init__(self) 
         self.client = client 
         self.address = address 
         self.size = 1024 
+	self.home = home
         print self.address
 
     def run(self): 
@@ -88,7 +89,7 @@ class Client(threading.Thread):
                         self.home.report_status(self.client)
                     elif 'fans' in data:
                         self.home.fans = not self.home.fans
-                        self.client.send('ACK\n')
+                        client.send('ACK\n')
                     elif 'lights' in data:
                         self.home.lights = not self.home.lights
                         self.client.send('ACK\n')
