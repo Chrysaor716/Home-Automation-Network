@@ -7,6 +7,7 @@ Pi3: Sensor
 import sys
 import time
 import socket
+import globals
 
 # Number of samples to take (& compute average for)
 numSamples = 0
@@ -15,7 +16,7 @@ averageTemperature = 0
 '''	Set up socket	'''
 """
 
-host = 'localhost'
+host = globals.server_ip
 port = 50000
 SIZE = 1024	# Max data size client will handle at a time
 s = None	# Initialize socket variable

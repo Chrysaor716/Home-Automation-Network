@@ -8,6 +8,7 @@ Entering a blank line will exit the client.
 import socket
 import sys
 import pickle
+import globals
 
 class Home:
     def __init__(self): 
@@ -19,7 +20,7 @@ class Home:
         data = pickle.dumps(self)
         client.send(data)
 
-host = 'localhost'
+host = globals.server_ip
 port = 50000
 size = 1024
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
