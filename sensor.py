@@ -14,7 +14,6 @@ numSamples = 0
 averageTemperature = 0
 
 '''	Set up socket	'''
-"""
 
 host = globals.server_ip
 port = 50000
@@ -31,12 +30,6 @@ except socket.error, (value, message):
 	if s:
 		s.close()
 	print 'Could not open socket: ' + message
-	sys.exit(1)
-"""
-
-
-
-
 
 while 1:
 	numSamples = numSamples + 1
@@ -80,21 +73,21 @@ while 1:
 
 		# Client transmits data to server & returns how much
 		#	data was sent to it.
-#		s.send(averageTemperature)
-#		print 'Sent ' + averageTemperature + ' to the server'
+		sendData = 'PI3 temp ' + str(averageTemperature)
+		s.send(sendData)
+		print 'Sent ' + str(averageTemperature) + ' to the server'
 
-		print 'average temperature: ' + str(averageTemperature)
+		# Retrieve data from server with a buffer size as the
+		#	argument, indicating the maximum size it will
+		#	handle at a time.
+		data = s.recv(SIZE)
+		print 'Received: ' + data + ' from server.'
 	
 		numSamples = 0
 		averageTemperature = 0
 	
 	print 'temp: ' + str(temperature)
 		
-	# Retrieve data from server with a buffer size as the
-	#	argument, indicating the maximum size it will
-	#	handle at a time.
-#	data = s.recv(SIZE)
-#	print 'Received: ' + data + ' from server.'
 
 	time.sleep(1) # Sample every second
 
