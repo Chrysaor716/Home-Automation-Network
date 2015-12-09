@@ -13,6 +13,8 @@ numSamples = 0
 averageTemperature = 0
 
 '''	Set up socket	'''
+"""
+
 host = 'localhost'
 port = 50000
 SIZE = 1024	# Max data size client will handle at a time
@@ -29,6 +31,11 @@ except socket.error, (value, message):
 		s.close()
 	print 'Could not open socket: ' + message
 	sys.exit(1)
+"""
+
+
+
+
 
 while 1:
 	numSamples = numSamples + 1
@@ -43,9 +50,12 @@ while 1:
 	#	with a "t=") displays a value 1000
 	#	times the temperature reading in Celcius.
 
-	# Open the file that contains the temperature
-	# 	device connected to the Pi.
-	file = open("/sys/bus/w1/devices/28-031572f40aff/w1_slave")
+	try:
+		# Open the file that contains the temperature
+		# 	device connected to the Pi.
+		file = open("/sys/bus/w1/devices/28-031572f40aff/w1_slave")
+	except IOError as e:
+		print 'Could not open file. Error ' + e
 	fileRead = file.read()
 	file.close()
 
@@ -63,23 +73,28 @@ while 1:
 
 	averageTemperature = averageTemperature + temperature
 
-	# Compute average temperature every 5 minutes (50 samples)
-	if numSamples == 50:
+	# Compute average temperature every 30 seconds (30 samples)
+	if numSamples == 30:
 		averageTemperature = averageTemperature / numSamples
 
 		# Client transmits data to server & returns how much
 		#	data was sent to it.
-		s.send(averageTemperature)
-		print 'Sent ' + averageTemperature ' to the server'
+#		s.send(averageTemperature)
+#		print 'Sent ' + averageTemperature + ' to the server'
 
+		print 'average temperature: ' + str(averageTemperature)
+	
 		numSamples = 0
+		averageTemperature = 0
+	
+	print 'temp: ' + str(temperature)
 		
 	# Retrieve data from server with a buffer size as the
 	#	argument, indicating the maximum size it will
 	#	handle at a time.
-	data = s.recv(SIZE)
-	print 'Received: ' + data + ' from server.'
+#	data = s.recv(SIZE)
+#	print 'Received: ' + data + ' from server.'
 
-	time.sleep(0.100) # Sample every millisecond
+	time.sleep(1) # Sample every second
 
 s.close() # Close the socket
