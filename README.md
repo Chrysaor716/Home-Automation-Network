@@ -4,7 +4,7 @@ Integration of four Raspberry Pi's to create an interactive home environment.
 The Pi's interact on a local network with either RabbitMQ as the message broker or sockets. One Pi act as a central server, with the rest communicating via that single server.
 
 	Pi 1: User Interaction
-Takes in voice input as well as a web-based protocol from the user.
+Takes in voice input or a web-based input from the user.
 
 	Pi 2: Server
 Central server that processes data and acts as the bridge between all the Pi's.
