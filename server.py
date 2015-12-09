@@ -30,6 +30,7 @@ class Server:
         self.size = 1024 
         self.server = None 
         self.threads = [] 
+	self.home = Home()
 
     def open_socket(self): 
         try: 
@@ -75,7 +76,6 @@ class Client(threading.Thread):
         self.address = address 
         self.size = 1024 
         print self.address
-        self.home = Home()
 
     def run(self): 
         running = 1 
