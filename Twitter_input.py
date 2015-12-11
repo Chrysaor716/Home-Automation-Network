@@ -77,7 +77,7 @@ class BlinkyStreamer(TwythonStreamer):
 					api.update_status(status=tweetStr)
     			
 			if str_data == 'lights ON' or str_data == 'lights OFF':
-				if data == 'ACK':
+				if data == 'ACK\n':
 					light = 'Lights status has been changed'
 					print light
 					tweetStr = '@hmuham7 ' + str(light)
@@ -89,7 +89,7 @@ class BlinkyStreamer(TwythonStreamer):
                                         api.update_status(status=tweetStr)
 			
 			if str_data == 'fans ON' or str_data == 'fans OFF':
-				if data == 'ACK':
+				if data == 'ACK\n':
 					fan = 'Fans status has been changed'
 					print fan
 					tweetStr = '@hmuham7 ' + str(fan)
@@ -100,11 +100,6 @@ class BlinkyStreamer(TwythonStreamer):
                                         tweetStr = '@hmuham7 ' + str(fan)
                                         api.update_status(status=tweetStr)
 			
-			#else:			
-    			#	sys.stdout.write(data)
-    			#	sys.stdout.write('%')
-
-                        s.close()
 # Create streamer
 try:
         stream = BlinkyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
