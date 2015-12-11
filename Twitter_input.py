@@ -54,7 +54,9 @@ class BlinkyStreamer(TwythonStreamer):
                         data = s.recv(size)
     
 			api = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)  # a new object for sending the response
-	
+			
+			epoch_time = time.mktime(time.localtime())
+
 			if str_data == 'getStat' or str_data == 'temp':
 				if data:
     					print 'Status of Home:'
@@ -73,29 +75,29 @@ class BlinkyStreamer(TwythonStreamer):
     					print 'Temperature is: ', home.temp, 'C'
 					print '\n'
 					
-					tweetStr = '@hmuham7 Status of Home: ' + 'Lights are ' + str(light) + ', Fans are ' + str(fan) + ' and Temperature is ' + str(home.temp) + 'C'
+					tweetStr = '@hmuham7 Status of Home (@Time: ' + str(epoch_time) + ') : ' + 'Lights are ' + str(light) + ', Fans are ' + str(fan) + ' and Temperature is ' + str(home.temp) + 'C'
 					api.update_status(status=tweetStr)
     			
 			if str_data == 'lights ON' or str_data == 'lights OFF':
 				if data == 'ACK\n':
-					light = 'Lights status has been changed'
+					light = '@Time: ' + str(epoch_time) + ' The Lights status has been changed'
 					print light
 					tweetStr = '@hmuham7 ' + str(light)
 					api.update_status(status=tweetStr)
 				else:
-					light = 'Lights status is the same'
+					light = '@Time: ' + str(epoch_time) + ' The Lights status is the same'
                                         print light
                                         tweetStr = '@hmuham7 ' + str(light)
                                         api.update_status(status=tweetStr)
 			
 			if str_data == 'fans ON' or str_data == 'fans OFF':
 				if data == 'ACK\n':
-					fan = 'Fans status has been changed'
+					fan = '@Time: ' + str(epoch_time) + ' The Fans status has been changed'
 					print fan
 					tweetStr = '@hmuham7 ' + str(fan)
                                 	api.update_status(status=tweetStr)
 				else:
-					fan = 'Fans status is the same'
+					fan = '@Time: ' + str(epoch_time) + ' The Fans status is the same'
                                         print fan
                                         tweetStr = '@hmuham7 ' + str(fan)
                                         api.update_status(status=tweetStr)
