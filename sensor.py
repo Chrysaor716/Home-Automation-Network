@@ -56,6 +56,7 @@ try:
 	def signal_handler(signal, frame):
 		s.close()
 		print 'connection closed'
+		GPIO.cleanup()
 		sys.exit(0)
 	signal.signal(signal.SIGINT, signal_handler)
 
