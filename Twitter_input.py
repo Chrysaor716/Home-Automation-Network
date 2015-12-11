@@ -105,9 +105,6 @@ class BlinkyStreamer(TwythonStreamer):
     			#	sys.stdout.write('%')
 
                         s.close()
-                        stream = BlinkyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-                        stream.statuses.filter(follow='2580010906')     # user ID is used to track users account for upcoming feeds.
-
 # Create streamer
 try:
         stream = BlinkyStreamer(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
