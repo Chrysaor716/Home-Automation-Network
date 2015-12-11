@@ -89,7 +89,7 @@ class Client(threading.Thread):
                         self.home.report_status(self.client)
                     elif 'fans' in data:
                         self.home.fans = not self.home.fans
-                        client.send('ACK\n')
+                        self.client.send('ACK\n')
                     elif 'lights' in data:
                         self.home.lights = not self.home.lights
                         self.client.send('ACK\n')
