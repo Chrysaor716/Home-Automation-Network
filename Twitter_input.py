@@ -9,10 +9,10 @@ from twython import TwythonStreamer
 from twython import Twython
 
 # Twitter application authentication for @hmuham7
-APP_KEY = '2ZKhoaqOmPWtaxbunwLb8bEcl'
-APP_SECRET = 'rIvACXB3VwbmnfGPPA0sAcKiWNHNtnlCfX2nArbnhLuyx1Li7t'
-OAUTH_TOKEN = '2580010906-OCwRjPlBoC1vBvbqUvYggMSLJiIVbiox9k1ac27'
-OAUTH_TOKEN_SECRET = 'rFE5jrWsQ71ipO94fYtUwe292gGeU1HMJtIGlFuTkCTDQ'
+APP_KEY = 'yjalXaP0cJMdmk6FtOWwa32sD'
+APP_SECRET = '2mXoeI4iRNamLXJbEMfNPMfvAA5Ina5H79VIVj2STdRk1Bw560'
+OAUTH_TOKEN = '2580010906-BtNa5Ikw8AP7f0Kh4GE4AbmReCMWJHnTaJs3NSx'
+OAUTH_TOKEN_SECRET = 'Mex5kY88EYseVCs7WcFIUbPr5r4awXh8SyrmWSDgMwJfa'
 
 
 #Setting up global variable to be used later
