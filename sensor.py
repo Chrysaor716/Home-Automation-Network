@@ -56,6 +56,7 @@ try:
 	def signal_handler(signal, frame):
 		s.close()
 		print 'connection closed'
+		GPIO.cleanup()
 		sys.exit(0)
 	signal.signal(signal.SIGINT, signal_handler)
 
@@ -99,7 +100,7 @@ while 1:
 
 	# Client transmits data to server & returns how much
 	#	data was sent to it.
-	sendData = 'PI3 temp ' + str(averageTemperature)
+	sendData = 'PI3 temp ' + str(temperature)
 	s.send(sendData)
 
 	# Retrieve data from server with a buffer size as the
