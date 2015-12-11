@@ -2,16 +2,40 @@
 
 """
 Pi3: Sensor
+Pi4: Output Devices
+	This script will be run on a Pi that will act
+		as both Pi3 and Pi4.
 """
 
 import sys
 import time
+import signal
 import socket
 import globals
+import RPi.GPIO as GPIO
+import pickle
 
-# Number of samples to take (& compute average for)
-numSamples = 0
-averageTemperature = 0
+class Home:
+    def __init__(self): 
+        self.lights = False
+        self.fans = False
+        self.temp = 72
+
+    def report_status(self, client):
+        data = pickle.dumps(self)
+        client.send(data)
+
+# Initialize GPIO ports
+gpio23 = 16 # GPIO 23 is pin 16 (RPi Model B+)
+gpio24 = 18 # GPIO 24 is pin 18
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False) # Turn off GPIO warnings
+# Set GPIO pins as outputs
+GPIO.setup(gpio23, GPIO.OUT)
+GPIO.setup(gpio24, GPIO.OUT)
+GPIO.output(gpio23, GPIO.LOW)
+GPIO.output(gpio24, GPIO.LOW)
 
 '''	Set up socket	'''
 
@@ -26,14 +50,22 @@ try:
 	s.settimeout(5)
 	# Connect to the server.
 	s.connect((host, port))
+
+	print 'connection opened'	
+	# Handle socket connections (close when necessary)
+	def signal_handler(signal, frame):
+		s.close()
+		print 'connection closed'
+		sys.exit(0)
+	signal.signal(signal.SIGINT, signal_handler)
+
 except socket.error, (value, message):
 	if s:
 		s.close()
 	print 'Could not open socket: ' + message
 
-while 1:
-	numSamples = numSamples + 1
 
+while 1:
 	# Note: Enter this command to the terminal:
 	#	ls -l /sys/bus/w1/devices
 	# The temperature sensor appears with an
@@ -65,30 +97,36 @@ while 1:
 	temperature = float(tempdata[2:])
 	temperature = temperature / 1000
 
-	averageTemperature = averageTemperature + temperature
+	# Client transmits data to server & returns how much
+	#	data was sent to it.
+	sendData = 'PI3 temp ' + str(averageTemperature)
+	s.send(sendData)
 
-	# Compute average temperature every 30 seconds (30 samples)
-	if numSamples == 30:
-		averageTemperature = averageTemperature / numSamples
+	# Retrieve data from server with a buffer size as the
+	#	argument, indicating the maximum size it will
+	#	handle at a time.
+	data = s.recv(SIZE)
+	print 'Received: ' + data + ' from server.'
 
-		# Client transmits data to server & returns how much
-		#	data was sent to it.
-		sendData = 'PI3 temp ' + str(averageTemperature)
-		s.send(sendData)
-		print 'Sent ' + str(averageTemperature) + ' to the server'
+	s.send('PI4 getStat')
+	data = s.recv(SIZE)
 
-		# Retrieve data from server with a buffer size as the
-		#	argument, indicating the maximum size it will
-		#	handle at a time.
-		data = s.recv(SIZE)
-		print 'Received: ' + data + ' from server.'
+	home = pickle.loads(data)
 	
-		numSamples = 0
-		averageTemperature = 0
-	
-	print 'temp: ' + str(temperature)
-		
+	print 'lights: ', home.lights
+	if home.lights == False:
+		GPIO.output(gpio23, GPIO.LOW)
+	else:
+		GPIO.output(gpio23, GPIO.HIGH)
 
+	print 'fans: ', home.fans
+	if home.fans == False:
+		GPIO.output(gpio24, GPIO.LOW)
+	else:
+		GPIO.output(gpio24, GPIO.HIGH)
+	
+	print 'temperature: ', home.temp
+	
 	time.sleep(1) # Sample every second
 
 s.close() # Close the socket
